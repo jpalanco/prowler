@@ -9,6 +9,7 @@ import yaml
 from packaging import version
 
 from prowler.lib.logger import logger
+from security import safe_requests
 
 timestamp = datetime.today()
 timestamp_utc = datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
@@ -89,7 +90,7 @@ def get_default_mute_file_path(provider: str):
 def check_current_version():
     try:
         prowler_version_string = f"Prowler {prowler_version}"
-        release_response = requests.get(
+        release_response = safe_requests.get(
             "https://api.github.com/repos/prowler-cloud/prowler/tags", timeout=1
         )
         latest_version = release_response.json()[0]["name"]

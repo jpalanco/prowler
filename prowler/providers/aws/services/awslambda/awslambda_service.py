@@ -4,14 +4,13 @@ import zipfile
 from concurrent.futures import as_completed
 from enum import Enum
 from typing import Any, Optional
-
-import requests
 from botocore.client import ClientError
 from pydantic import BaseModel
 
 from prowler.lib.logger import logger
 from prowler.lib.scan_filters.scan_filters import is_resource_filtered
 from prowler.providers.aws.lib.service.service import AWSService
+from security import safe_requests
 
 
 class Lambda(AWSService):
@@ -91,7 +90,7 @@ class Lambda(AWSService):
             )
             if "Location" in function_information["Code"]:
                 code_location_uri = function_information["Code"]["Location"]
-                raw_code_zip = requests.get(code_location_uri).content
+                raw_code_zip = safe_requests.get(code_location_uri).content
                 return LambdaCode(
                     location=code_location_uri,
                     code_zip=zipfile.ZipFile(io.BytesIO(raw_code_zip)),
