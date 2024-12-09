@@ -91,7 +91,7 @@ class Lambda(AWSService):
             )
             if "Location" in function_information["Code"]:
                 code_location_uri = function_information["Code"]["Location"]
-                raw_code_zip = requests.get(code_location_uri).content
+                raw_code_zip = requests.get(code_location_uri, timeout=60).content
                 return LambdaCode(
                     location=code_location_uri,
                     code_zip=zipfile.ZipFile(io.BytesIO(raw_code_zip)),

@@ -1174,7 +1174,7 @@ class AzureProvider(Provider):
             "client_secret": client_secret,
             "scope": "https://graph.microsoft.com/.default",
         }
-        response = requests.post(url, headers=headers, data=data).json()
+        response = requests.post(url, headers=headers, data=data, timeout=60).json()
         if "access_token" not in response.keys() and "error_codes" in response.keys():
             if f"Tenant '{tenant_id}'" in response["error_description"]:
                 raise AzureNotValidTenantIdError(

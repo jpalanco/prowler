@@ -238,7 +238,7 @@ class Jira:
             }
 
             headers = {"Content-Type": "application/json"}
-            response = requests.post(self.TOKEN_URL, json=body, headers=headers)
+            response = requests.post(self.TOKEN_URL, json=body, headers=headers, timeout=60)
 
             if response.status_code == 200:
                 tokens = response.json()
@@ -285,7 +285,7 @@ class Jira:
         """
         try:
             headers = {"Authorization": f"Bearer {access_token}"}
-            response = requests.get(self.API_TOKEN_URL, headers=headers)
+            response = requests.get(self.API_TOKEN_URL, headers=headers, timeout=60)
 
             if response.status_code == 200:
                 resources = response.json()
@@ -363,7 +363,7 @@ class Jira:
             }
 
             headers = {"Content-Type": "application/json"}
-            response = requests.post(url, json=body, headers=headers)
+            response = requests.post(url, json=body, headers=headers, timeout=60)
 
             if response.status_code == 200:
                 tokens = response.json()
@@ -427,7 +427,7 @@ class Jira:
             response = requests.get(
                 f"https://api.atlassian.com/ex/jira/{jira.cloud_id}/rest/api/3/myself",
                 headers=headers,
-            )
+            timeout=60)
 
             if response.status_code == 200:
                 return Connection(is_connected=True)
@@ -493,7 +493,7 @@ class Jira:
             response = requests.get(
                 f"https://api.atlassian.com/ex/jira/{self.cloud_id}/rest/api/3/project",
                 headers=headers,
-            )
+            timeout=60)
 
             if response.status_code == 200:
                 # Return the Project Key and Name, using only a dictionary
@@ -559,7 +559,7 @@ class Jira:
             response = requests.get(
                 f"https://api.atlassian.com/ex/jira/{self.cloud_id}/rest/api/3/issue/createmeta?projectKeys={project_key}&expand=projects.issuetypes.fields",
                 headers=headers,
-            )
+            timeout=60)
 
             if response.status_code == 200:
                 if len(response.json()["projects"]) == 0:
@@ -1144,7 +1144,7 @@ class Jira:
                     f"https://api.atlassian.com/ex/jira/{self.cloud_id}/rest/api/3/issue",
                     json=payload,
                     headers=headers,
-                )
+                timeout=60)
 
                 if response.status_code != 201:
                     response_error = f"Failed to send finding: {response.status_code} - {response.json()}"
