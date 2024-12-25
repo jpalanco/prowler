@@ -45,7 +45,7 @@ def set_tenant(func):
             raise KeyError("This task requires the tenant_id")
 
         with connection.cursor() as cursor:
-            cursor.execute(f"SELECT set_config('api.tenant_id', '{tenant_id}', TRUE);")
+            cursor.execute("SELECT set_config('api.tenant_id', ?, TRUE);", (tenant_id, ))
 
         return func(*args, **kwargs)
 

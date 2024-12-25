@@ -46,7 +46,7 @@ def psycopg_connection(database_alias: str):
 def tenant_transaction(tenant_id: str):
     with transaction.atomic():
         with connection.cursor() as cursor:
-            cursor.execute(f"SELECT set_config('api.tenant_id', '{tenant_id}', TRUE);")
+            cursor.execute("SELECT set_config('api.tenant_id', ?, TRUE);", (tenant_id, ))
             yield cursor
 
 
@@ -84,7 +84,6 @@ def generate_random_token(length: int = 14, symbols: str | None = None) -> str:
     """
     Generate a random token with the specified length.
     """
-    _symbols = "23456789ABCDEFGHJKMNPQRSTVWXYZ"
     return "".join(secrets.choice(symbols or _symbols) for _ in range(length))
 
 
